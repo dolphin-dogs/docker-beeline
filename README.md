@@ -1,7 +1,6 @@
 Beeline packaged in a docker container
 ======================================
 
-
 ```
 HIVE_VERSION=1.2.0
 docker run --rm -ti --entrypoint=./beeline.sh sutoiku/beeline:hive-$HIVE_VERSION -u jdbc:hive2://localhost:10000/default
@@ -10,7 +9,15 @@ docker run --rm -ti --entrypoint=./beeline.sh sutoiku/beeline:hive-$HIVE_VERSION
 The default hive version is 1.2.0 to be compatible with HDP-2.4 and up.
 It also works for homebrew's 2.1.0 (Jan 2017)
 
-https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-Beeline–CommandLineShell
+Example:
+========
+Extract some data as csv:
+
+```
+./beeline.sh -u jdbc:hive2://localhost:10000/default --outputformat=csv2 --showHeader=true --color=false -e 'select * from u_data limit 10;' > theFileWhereToStoreTheData.csv
+```
+
+Full documentation: https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-Beeline–CommandLineShell
 
 Note
 ====

@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Downloading dependencies from maven central for hive-$HIVE_VERSION..."
+echo "Downloading dependencies from maven central for hive-$HIVE_VERSION..." >&2
 
 cd lib
 echo "$HIVE_VERSION" > hive.version
@@ -14,4 +14,4 @@ curl -LO http://central.maven.org/maven2/org/apache/hive/hive-jdbc/$HIVE_VERSION
 [ ! -f super-csv-2.2.0.jar ] && curl -LO http://central.maven.org/maven2/net/sf/supercsv/super-csv/2.2.0/super-csv-2.2.0.jar
 
 cd ..
-echo "Dependencies downloaded"
+echo "Dependencies downloaded" >&2

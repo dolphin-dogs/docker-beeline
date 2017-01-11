@@ -7,6 +7,6 @@ export HIVE_VERSION="$HIVE_VERSION"
 [ ! -f "lib/hive.version" ] || [ "$(cat lib/hive.version)" != "$HIVE_VERSION" ] && sh lib/download.sh
 
 CLASSPATH=$(JARS=(lib/*.jar); IFS=:; echo "${JARS[*]}")
-echo "Starting beeline for $(cat lib/hive.version)"
-echo "CLASSPATH $CLASSPATH"
+echo "Starting beeline for $(cat lib/hive.version)" >&2
+echo "CLASSPATH $CLASSPATH" >&2
 java -Dlog4j.configurationFile=conf/log4j2.properties -cp $CLASSPATH org.apache.hive.beeline.BeeLine "$@"
