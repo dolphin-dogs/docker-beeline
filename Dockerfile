@@ -8,6 +8,8 @@ ENV HIVE_VERSION 1.2.0
 
 WORKDIR /apps/beeline
 
-RUN sh lib/download.sh
+RUN addgroup --gid 40561 stoic && useradd --gid 40561 --uid 40561 stoic && \
+    sh lib/download.sh
 
+USER stoic
 ENTRYPOINT /apps/beeline/beeline.sh
