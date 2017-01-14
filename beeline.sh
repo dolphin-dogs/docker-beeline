@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Example: ./beeline.sh -u jdbc:hive2://localhost:10000/default
 [ -z "$HIVE_VERSION" ] && [ -f "lib/hive.version" ] && HIVE_VERSION="$(cat lib/hive.version)"

@@ -9,12 +9,17 @@ docker run --rm -ti --entrypoint=./beeline.sh sutoiku/beeline:hive-$HIVE_VERSION
 The default hive version is 1.2.0 to be compatible with HDP-2.4 and up.
 It also works for homebrew's 2.1.0 (Jan 2017)
 
+For hive-1.2.0, we are using a patched version of beeline where the fix HIVE-7224 is applied (--incremental=true by default)
+and added an option --fetchSize to controle the size of the fetches).
+
 Example:
 ========
 Extract some data as csv:
 
 ```
-./beeline.sh -u jdbc:hive2://localhost:10000/default --outputformat=csv2 --showHeader=true --color=false -e 'select * from u_data limit 10;' > theFileWhereToStoreTheData.csv
+./beeline.sh -u jdbc:hive2://localhost:10000/default --outputformat=csv2 --showHeader=true --color=false \
+	--fetchSize=100000 \
+	-e 'select * from u_data limit 10;' > theFileWhereToStoreTheData.csv
 ```
 
 Full documentation: https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-Beeline–CommandLineShell

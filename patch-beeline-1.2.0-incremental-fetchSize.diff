@@ -1,0 +1,73 @@
+diff --git a/beeline/src/java/org/apache/hive/beeline/BeeLine.java b/beeline/src/java/org/apache/hive/beeline/BeeLine.java
+index b3d89cb..a9ca48f 100644
+--- a/beeline/src/java/org/apache/hive/beeline/BeeLine.java
++++ b/beeline/src/java/org/apache/hive/beeline/BeeLine.java
+@@ -1805,6 +1805,9 @@ Statement createStatement() throws SQLException {
+     if (signalHandler != null) {
+       signalHandler.setStatement(stmnt);
+     }
++    if (getOpts().getFetchSize() != -1) {
++      stmnt.setFetchSize(getOpts().getFetchSize());
++    }
+     return stmnt;
+   }
+ 
+diff --git a/beeline/src/java/org/apache/hive/beeline/BeeLineOpts.java b/beeline/src/java/org/apache/hive/beeline/BeeLineOpts.java
+index 649bb63..a56b14d 100644
+--- a/beeline/src/java/org/apache/hive/beeline/BeeLineOpts.java
++++ b/beeline/src/java/org/apache/hive/beeline/BeeLineOpts.java
+@@ -65,7 +65,7 @@
+   private boolean autoCommit = false;
+   private boolean verbose = false;
+   private boolean force = false;
+-  private boolean incremental = false;
++  private boolean incremental = true;
+   private boolean showWarnings = false;
+   private boolean showNestedErrs = false;
+   private boolean showElapsedTime = true;
+@@ -74,6 +74,7 @@
+   private int maxWidth = DEFAULT_MAX_WIDTH;
+   private int maxHeight = DEFAULT_MAX_HEIGHT;
+   private int maxColumnWidth = 15;
++  private int fetchSize = 10000;
+   int timeout = -1;
+   private String isolation = DEFAULT_ISOLATION_LEVEL;
+   private String outputFormat = "table";
+@@ -239,11 +240,16 @@ public void set(String key, String value) {
+ 
+   public boolean set(String key, String value, boolean quiet) {
+     try {
+-      beeLine.getReflector().invoke(this, "set" + key, new Object[] {value});
++      if (value.equals("true") || value.equals("false")) {
++        beeLine.getReflector().invoke(this, "set" + key, new Object[] {new Boolean(value.equals("true"))});
++      } else {
++        beeLine.getReflector().invoke(this, "set" + key, new Object[] {value});
++      }
+       return true;
+     } catch (Exception e) {
+       if (!quiet) {
+-        beeLine.error(beeLine.loc("error-setting", new Object[] {key, e}));
++        e.printStackTrace(); // can use beeline.error yet as getOpts() return nulls.
++        //beeLine.error(beeLine.loc("error-setting", new Object[] {key, e}));
+       }
+       return false;
+     }
+@@ -345,6 +351,18 @@ public String getIsolation() {
+     return isolation;
+   }
+ 
++  public void setFetchSize(String fetchSize) {
++    this.fetchSize = Integer.parseInt(fetchSize);
++  }
++
++  public void setFetchSize(int fetchSize) {
++    this.fetchSize = fetchSize;
++  }
++
++  public int getFetchSize() {
++    return this.fetchSize;
++  }
++
+   public void setHistoryFile(String historyFile) {
+     this.historyFile = historyFile;
+   }

@@ -5,7 +5,9 @@ cd lib
 echo "$HIVE_VERSION" > hive.version
 rm hive-beeline-*.jar hive-jdbc-*.jar
 
-curl -LO http://central.maven.org/maven2/org/apache/hive/hive-beeline/$HIVE_VERSION/hive-beeline-$HIVE_VERSION.jar
+[ "$HIVE_VERSION" = "1.2.0" ] \
+    && curl -LO https://s3.amazonaws.com/stoic-public/hive-beeline-1.2.0-fetchSize.jar \
+    || curl -LO http://central.maven.org/maven2/org/apache/hive/hive-beeline/$HIVE_VERSION/hive-beeline-$HIVE_VERSION.jar
 curl -LO http://central.maven.org/maven2/org/apache/hive/hive-jdbc/$HIVE_VERSION/hive-jdbc-$HIVE_VERSION-standalone.jar
 
 [ ! -f commons-cli-1.2.jar ] && curl -LO http://central.maven.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar
